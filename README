@@ -1,0 +1,132 @@
+
+		AMAP v5.4
+		Application MAPper
+
+		- a next generation scanning tool
+
+		- by van Hauser and DJ RevMoon / THC <amap-dev@thc.org>
+
+		http://www.thc.org
+
+
+		NOTE: THIS TOOL IS OUTDATED. USE NMAP.
+
+
+
+INTRODUCTION
+============
+
+This is a public release of Amap. Amap is a next-generation scanning
+tool for pentesters. It attempts to identify applications even if they
+are running on a different port than normal. 
+It also identifies non-ascii based applications. This is achieved by
+sending trigger packets, and looking up the responses in a list of
+response strings. 
+
+Without filled databases containing triggers and responses, the tool is
+worthless, so I ask you to help us fill the database. How to do this? Well,
+whenever a client application connects to a server, some kind of handshake
+is exchanged (at least, usually. Syslogd for instance won't say nothing,
+and snmpd without the right community string neither). Anyway, amap takes
+the first packet sent back and compares it to a list of signature responses.
+Really simple, actually. And in reality, it turns out really to be that
+simple, at least, for most protocols.
+
+So now, with amap, you can identify that SSL server running on port 3442, 
+as well as that Oracle listener on port 23. 
+
+For unknown protocols, you can use amapcrap, which sends random crap to a
+udp, tcp or ssl'ed port, to illicit a response, which you can then
+put into the appdefs.trig and appdefs.resp files.
+
+
+INSTALLING
+==========
+
+-> please see the INSTALL file for hints and known problems/solutions
+
+
+TRIGGERS AND RESPONSES
+======================
+
+Take a look at the supplied appdefs.trig and appdefs.resp files.
+Much will become clear then.
+
+
+ESSENTIALS
+==========
+
+Amap takes nmap -oM output files as input. You can specify a single IP
+address and port)s= on the command line, but usually, you'd run it from a nmap
+file, thusly:
+
+   # (first "nmap -sS -oM results.nmap -p 1-65535 TARGET" of course)
+   # amap -i results.nmap -o results.amap -m
+
+or:
+
+   # amap 127.0.0.1 443
+
+or:
+
+   # amap target 21-6000
+
+Other switches and options can be seen by typing:
+
+    # amap -h
+
+
+HINTS
+=====
+
+use the -1 switch, it makes amap much faster!
+use the -b switch to let amap print the banners!
+use the -q switch to hide messages about closed ports
+use the -v switch to get more information
+use the -t and -T switches to adapt to your target servers (timeout options)
+use the -W switch to update your fingerprint database online
+
+To have a very fast port scanner and banner grabber (but inefficient
+application identification):
+  amap -qbp http TARGET 1-65535
+and it gives better results than the "native" banner grab mode:
+  amap -B -q TARGET 1-65535
+
+
+CONTRIBUTING
+============
+
+Send us the initial packets (sent and received) in tcpdump format for all
+wacko, proprietary and obscure applications. Send them to:
+amap-dev@thc.org. Please include application name and version.
+A web-enabled interface with uploader will become available soon for your
+convenience. 
+Want to become an amap beta tester? Send an email to amap-subscribe@thc.org
+
+
+COMMERCIAL COMPANIES/SERVICES
+=============================
+
+This tool is not completely GPL! See the LICEN[SC]E.* files.
+
+
+BUGS
+====
+
+None :-)  Send bugreports to amap-dev@thc.org. 
+
+
+TODO
+====
+
+-> see the TODO file
+
+
+THANKS
+======
+
+T1nk, Guido van Rooij, Unicorn, Arhab, Johnny Cyberpunk and many others who
+sent us triggers and responses.
+
+Yours,
+	van Hauser and DJ RevMoon

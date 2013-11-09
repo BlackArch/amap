@@ -1,0 +1,193 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+  echo Options:
+  echo "  --prefix=path     prefix path to install amap and its datafiles to"
+  echo "  --help            this here"
+  exit 0
+fi
+if [ "$1" = "--help" ]; then
+  echo Options:
+  echo "  --prefix=path     path to install amap and its datafiles to"
+  echo "  --help            this here"
+  exit 0
+fi
+
+cd pcre-3.9 || exit 1
+./configure || exit 1
+cd ..
+
+echo
+echo
+echo "Starting amap auto configuration ..."
+rm -f Makefile.in
+PREFIX=""
+SSL_PATH=""
+SSL_IPATH=""
+CRYPTO_PATH=""
+NSL_PATH=""
+SOCKET_PATH=""
+MANDIR=""
+LIBDIRS=`cat /etc/ld.so.conf 2> /dev/null`
+PREFIX=`echo "$1"|grep prefix=|sed 's/.*prefix=//i'`
+echo
+
+echo "Checking for openssl ..."
+for i in  $LIBDIRS /lib  /usr/lib /usr/local/lib /opt/local/lib \
+/*ssl /usr/*ssl /opt/*ssl /usr/local/*ssl /opt/local/*ssl \
+/*ssl/lib /usr/*ssl/lib /opt/*ssl/lib /usr/local/*ssl/lib /opt/local/*ssl/lib .
+do
+    if [ "X" = "X$SSL_PATH" ]; then
+        if [ -f "$i/libssl.so" -o -f "$i/libssl.dylib" ]; then
+            echo $i | grep -qi mozilla || SSL_PATH="$i"
+        fi
+    fi
+    if [ "X" = "X$SSL_PATH" ]; then
+        TMP_LIB=`/bin/ls $i/libssl.* 2> /dev/null | grep libssl.`
+        if [ -n "$TMP_LIB" ]; then
+          echo $i | grep -qi mozilla || SSL_PATH="$i"
+        fi
+    fi
+    if [ "X" = "X$CRYPTO_PATH" ]; then
+        if [ -f "$i/libcrypto.so" -o -f "$i/libcrypto.dylib" ]; then
+            echo $i | grep -qi mozilla || CRYPTO_PATH="$i"
+        fi
+    fi
+    if [ "X" = "X$CRYPTO_PATH" ]; then
+        TMP_LIB=`/bin/ls $i/libcrypto.* 2> /dev/null | grep libcrypto.`
+        if [ -n "$TMP_LIB" ]; then
+          echo $i | grep -qi mozilla || CRYPTO_PATH="$i"
+        fi
+    fi
+done
+
+for i in /usr/local/include /*ssl/include /usr/include \
+/opt/*ssl/include /usr/*ssl/include /usr/local/*ssl/include .
+do
+    if [ "X" = "X$SSL_IPATH" ]; then
+        if [ -f "$i/openssl/ssl.h" ]; then
+            echo $i | grep -qi mozilla || SSL_IPATH="$i"
+        fi
+    fi
+done
+
+if [ "X" = "X$SSL_PATH" ]; then
+    SSL_IPATH=""
+    CRYPTO_PATH=""
+fi
+if [ "X" = "X$SSL_IPATH" ]; then
+    SSL_PATH=""
+    CRYPTO_PATH=""
+fi
+if [ -n "$SSL_PATH" ]; then
+    echo "                     ... found"
+fi
+if [ "X" = "X$SSL_PATH" ]; then
+    echo "                     ... NOT found, SSL support disabled"
+fi
+if [ "$SSL_IPATH" = "/usr/include" ]; then
+    SSL_IPATH=""
+fi
+
+SYS=`uname -s`
+if [ "$SYS" = "SunOS" ]; then
+    echo "Checking for Solaris libraries ..."
+    for i in  /lib /usr/lib /usr/local/lib $LIBDIRS
+    do
+        if [ "X" = "X$NSL_PATH" ]; then
+            if [ -f "$i/libnsl.so" ]; then
+                NSL_PATH="$i"
+            fi
+        fi
+        if [ "X" = "X$SOCKET_PATH" ]; then
+            if [ -f "$i/libsocket.so" ]; then
+                SOCKET_PATH="$i"
+            fi
+        fi
+        if [ "X" = "X$RESOLV_PATH" ]; then
+            if [ -f "$i/libresolv.so" ]; then
+                RESOLV_PATH="$i"
+            fi
+        fi
+    done
+    if [ "X" = "X$NSL_PATH" ]; then
+        echo "NSL library not found, which is needed on Solaris."
+    fi
+    if [ "X" = "X$SOCKET_PATH" ]; then
+        echo "Socket library not found, which is needed on Solaris."
+    fi
+    if [ "X" = "X$RESOLV_PATH" ]; then
+        echo "Resolv library not found, which is needed on Solaris."
+    fi
+fi
+
+echo
+XDEFINES=""
+XLIBS=""
+XLIBPATHS=""
+XIPATHS=""
+
+if [ -n "$SSL_PATH" ]; then
+    XDEFINES="$XDEFINES -DOPENSSL"
+fi
+for i in $SSL_PATH $CRYPTO_PATH $NSL_PATH $SOCKET_PATH $RESOLV_PATH; do
+    XLIBPATHS="$XLIBPATHS -L$i"
+done
+if [ -n "$SSL_IPATH" ]; then
+    XIPATHS="-I$SSL_IPATH"
+fi
+if [ -n "$SSL_PATH" ]; then
+    XLIBS="$XLIBS -lssl"
+fi
+if [ -n "$CRYPTO_PATH" ]; then
+    XLIBS="$XLIBS -lcrypto"
+fi
+if [ -n "$NSL_PATH" ]; then
+    XLIBS="$XLIBS -lnsl"
+fi
+if [ -n "$SOCKET_PATH" ]; then
+    XLIBS="$XLIBS -lsocket"
+fi
+if [ -n "$RESOLV_PATH" ]; then
+    XLIBS="$XLIBS -lresolv"
+fi
+
+for i in /usr/man /usr/share/man /usr/local/man /usr/local/share/man ; do
+  if [ -d $i ]; then
+    MANDIR=$i
+  fi
+done
+if [ "X" = "X$MANDIR" ]; then
+  MANDIR="/usr/local/man"
+fi
+echo "Manual page will be install to: $MANDIR"
+echo
+
+if [ -d /usr/kerberos/include ]; then
+  XIPATHS="$XIPATHS -I/usr/kerberos/include"
+fi
+
+if [ -n "$PREFIX" ]; then
+    XDEFINES="$XDEFINES -DAMAP_PREFIX='\"$PREFIX\"'"
+else
+    PREFIX="/usr/local"
+fi
+echo "Amap will be installed into .../bin and .../etc of: $PREFIX"
+echo "  (change this by running ./configure --prefix=path)"
+echo
+
+echo "Writing Makefile.in ..."
+echo "XDEFINES=$XDEFINES" >> Makefile.in
+echo "XLIBS=$XLIBS" >> Makefile.in
+echo "XLIBPATHS=$XLIBPATHS" >> Makefile.in
+echo "XIPATHS=$XIPATHS" >> Makefile.in
+echo "MANDIR=$MANDIR/man1/" >> Makefile.in
+echo "PREFIX=$PREFIX" >> Makefile.in
+echo >> Makefile.in
+
+echo "Generating Makefile ..."
+cat Makefile.in > Makefile
+cat Makefile.am >> Makefile
+
+echo
+echo "now type \"make\""

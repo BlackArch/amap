@@ -1,0 +1,32 @@
+HOW TO INSTALL
+==============
+
+run
+ $ ./configure
+then
+ $ make
+and
+ $ su
+ # make install
+thats it.
+
+
+KNOWN PROBLEMS
+==============
+If you have Redhat 9.x installed, compilation may fail because of
+a buggy openssl package. Deinstall the package and install an older version.
+Then amap compiles fine. You may also take the painful way of setting
+symlinks from files in the /usr/kerberos/include directory to /usr/include.
+
+
+KNOWN TO COMPILE AND RUN ON
+===========================
+SuSE 8.x, 9.x (Linux 2.4.19-4GB/i686)
+Redhat 9.0 (Linux 2.4-18-3/i686)
+Slackware 8.1 (Linux 2.4.21/i586)
+Parisc/Debian (Linux 2.4.19/hppa64)
+OpenBSD 3.3 (Sparc64)
+OpenBSD 3.3 (i686)
+Solaris 5.7 (Sparc)
+OSX/Darwin 6.6 (Mac PowerPC)
+FreeBSD 5.x (i686)

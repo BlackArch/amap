@@ -1,0 +1,397 @@
+Changelog
+
+v5.4	April 2011 (THC public release)
+	* Fix for IPv6 introduced in v5.3, doh
+
+v5.3	April 2011 (THC public release)
+	! This is a release to fix IPv6 UDP port scanning as no other tool
+        ! currently exists to do that.
+        ! Beside this, amap is outdated, and nmap should be prefered
+        * Fixed UDP port scanning for IPv6
+        * Disabled web update
+        * added printing of [] brackets around IPv6 addresses (required)
+	* Fixed a bug in amapcrap that the trigger would not display correctly
+
+v5.2	September 2005 (THC public release)
+	! THIS IS A THC TAX ANNIVERSARY SPECIAL RELEASE ! HAVE FUN !
+	* Included patch from ka0ttic@gentoo.org for cleaner gcc compile
+	* Added SSL_Pending() to prevent rare locking on SSL ports,
+	  thanks to michel(at)arboi.fr.eu.org for reporting
+	* Added lots of fingerprints, most from Johnny Cyberpunk / THC - THANKS!
+
+v5.1	June 2005 (THC public release)
+	* Big appdefs.resp update. Thanks to all contributors!
+	* Finally and forever fixed the --prefix= issue
+	* Fixed the web update function for bad inet_pton implementations
+	* Added support for nmap files with IPv6 addresses
+	* You can scan/check port 0 now (wish from nbach<at>deloitte.dk)
+	* Less error prone "make install"
+
+v5.0	February 2005 (THC public release)
+	* IPv6 support added, use -6 to activate
+	* Made the help screen easier to read
+	* No Cygwin detection needed anymore
+	* Dump -d option will only print "Unrecognized" response prior those
+	  responses which are *really* not unrecognized
+	* Uh, appdefs.* files were installed to both, bin/ and etc/, duh
+	  finally they are really only in .../etc/
+	* Removed the "error - ignored" messages from Makefile
+	* Added amap-lib - an open interface so incorporation can be made
+	  easily into other programs. See the text file AMAP-LIB-INTERFACE
+	* Fixed "lvalue deprecated" warnings during compilation, lets hope
+	  amap still compiles on old UNIXes. Please report if not.
+	* Fixed prefix issue if "./configure --prefix=/bla" was used
+
+v4.9    February 2005 (THC internal release)
+        - internal, see v5.0
+
+v4.8	January 2005 (THC public release)
+	* A project web page for amap was set-up: http://www.thc.org/thc-amap
+	* Added an Online Update feature for the application fingerprints!
+	  Just run it as "amap -W" and there you go! Includes version
+	  checking and some nice other features.
+	* The application fingerprints of amap will now be installed to
+	  /usr/local/etc - this has been asked for sooo long :-)
+	* Added many new responses (thanks to finkga@vt.edu,
+	  MattT@netforcement.com and others)
+	* Fixed a bug in the -q option
+	* Note: the license changed, and is now the same as hydra
+	* Added autodetection for Cygwin and MacOS/X, enhanced openssl
+	  detection
+
+v4.7	October 2004 (THC public release)
+	* Fixed a bug in the SSL analyzing function, seems openssl changed
+	  behaviour, fingerprinting behing SSL ports works now again
+	* Added more triggers and responses (especially Mikhael@nessus.org
+	  sent in lots of stuff, thanks a lot)
+
+v4.6	June 2004 (THC public release)
+	* Added 9 new responses (thanks to archanab@iplocks.com, Alf, and more)
+	* Fixed a small string termination bug (thanks to mjc@bitz.ca)
+
+v4.5	November 2003 (THC public release)
+	* Added portability fixes for openbsd (thanks to tony@libpcap.net)
+	* Added portability fixes for cygwin (thanks to nexus@patrol.i-way.co.uk)
+	* Added 6 responses (thanks to jrdepriest@ftb.com, indole@bu.edu and
+	  t.veronesi@inwind.it)
+
+v4.4	September 2003 (unreleased)
+	* Added mkdir -p to the Makefile (thanks to mrjoe@host.sk)
+	* Added a few responses
+
+v4.3	September 2003 (THC public release)
+	* Trigger names are now always printed with unrecognized responses
+	* Added 8 new responses (thanks to jai.s@net4india.net,
+	  haugh@cs.ucdavis.edu, ngregoire@exaprobe.com, bcalder01@yahoo.com
+	  and file13@budweiser.com)
+	* Fixed a off-by-one overflow (which would not fuck up anything :-)
+	  was found by z33d (thanks to z33d@isec.pl)
+	* Added --prefix option to configure script, and honoring PREFIX
+	* Enhanced ssl library searching
+	* Added PCRE_DOTALL to the pcre regex definition to enhance
+	  response identifications
+	* Fixed typos :-) (thanks to guys from the CCC Camp presentation)
+
+v4.2	August 2003 (THC public release)
+	* Added 10 new responses (thanks to jrdepriest@ftb.com,
+	  adarth@gazeta.pl, larry@thorn.net and jc@thc.org)
+	* Enhanced again the max size for an nmap line, lets hope 64k are
+	  enough now! (thanks to kapkebap@gmx.de)
+	* Due a bug, amap would only check the last host line in nmap files
+	* Fixed a compiler warning (thanks to yonatan@xpert.com)
+	* Trigger name is now displayed in verbose mode by unrecognized
+	  responses
+        - 4.1 - THC beta release -
+	* 28 new response ids and triggers (thanks to jrdepriest@ftb.com,
+	  madhat@unspecific.com, k.gavrilenko@arhont.com and yclin@ustc.edu)
+	* It was possible to define ports to be scanned > 65535, fixed
+	  (found by harl@marsmenschen.com)
+	* If appdefs.* files are in MS-DOS file format, this is not a problem
+	  any more :-) no need for dos2unix etc. if you received appdefs.*
+	  files via M$-Outlook
+
+v4.0	July 2003 (THC public release)
+	! This is the first public release of amap after its complete rewrite !
+	! If you would like to be an amap beta tester, subscribe yourself to
+	  our amap mailing list! send an email to: amap-subscribe@thc.org
+	! What is new from the last public version (2.7):
+	  + TCP connection reuse for RPC identification
+	  + Banner grab mode, Portscan mode (-B, -P)
+	  + for response identification (appdefs.resp):
+		  * response strings are now real perl regular expressions
+		  * can hit only on a defined trigger if wished so
+		  * can have a minimum and maximum length set on the reply data
+		  * can require the ip protocol (tcp or udp)
+	  + Put as many ports on the command line as you like and ranges are
+	    supported too! :-)
+	  + much faster
+	  + more reliable
+	  + bug fixes, better platform support
+	  + more application responses (of course)
+	  + added -q (uiet) switch which will not report any closed ports,
+	    and wont mark them as unidentified.
+	! What changed from the last public version (2.7):
+	  - switched the meaning of the -u and -U options
+	  - Renamed -C options (number of parallel connections) to -c ...
+	  - -C now specifies the number of retries on connection timeouts
+	  - file formats for appdefs.* changed
+	  - output changed a bit (it is much better now)
+	  - README, man page, etc. are all up to date now
+	! Finally: thanks a lot to Skyper for the pcre library hint and all
+	  the beta testers who helped to make amap stable, reliable and
+	  bugfree :-) - and of course added many, many application ids.
+	! Have fun !
+
+//=============================== OLD ======================================\\
+
+v3.8	July 2003 (unreleased)
+	* Fix in skip functions and SSL shutdown
+	* Added new responses (thanks to cam@austin.utexas.edu and jc@thc.org)
+	* Reworked the README file, added an INSTALL file
+	! v3.8 will now be renamed to v4.0 and made public
+
+v3.7	July 2003 (THC beta release)
+	* Thanks to yclin@ustc.edu for providing a patch for my configure
+	  script to let it run on Solaris successfully
+	* Amap crashed when the nmap input file was not containing correct
+	  data. Fixed. (thanks to robertj@wirehub.nl and yclin@ustc.edu)
+	* Enhanced a few responses (thanks to ralph@tink.org, yclin@ustc.edu,
+	  robertj@wirehub.nl)
+	* Added man page directory detection to the configure script :-)
+	* Fixed a typo in an error message (thanks to harl@marsmenschen.com)
+
+v3.6	July 2003 (THC beta release)
+	* Amap segfaulted when executed like ./amap -B localhost 1-10000
+	  for no known reason. disallowing socket 0 solved it.
+	  (thanks to harl@marsmenschen.com for reporting)
+	* Amap would loop endlessly in portscan mode against too many UDP ports.
+	  UDP timeout checks were not correctly implemented. (thanks to  
+	  s.wagner@email.de for reporting)
+	* Small enhancements
+
+v3.5	July 2003 (THC beta release)
+	! There is now a betatest mailinglist available !
+	* Added port range support (e.g. 20-25) on commandline
+	* Amap needs now less memory and is a little bit faster
+	* Added -q (uiet) switch which will not report any closed ports,
+	  and wont mark them as unidentified.
+	* Added more response IDs (thanks to mstar@smoke.dope.org and
+	  dj@outpost24.com
+	* Added a Solaris library definition (thanks to yclin@ustc.edu)
+
+v3.4	June 2003 (THC special release)
+	* Added -B option, which just grabs a banner, no triggers are sent
+	* Added -P option, which makes amap a full connect port scanner.
+	  Note: Amap is a little bit faster than nmap -sT, cool ...
+	* Added another data definition to the -m (achine readable) logfile
+	  output. It also has got a :PORT_STATUS: field now, which is set to
+	  either: open, closed, timeout.
+	* Amap now reuses sockets, which is needed for port scanning :-)
+
+v3.3	June 2003 (THC beta release)
+	* Renamed -C options (number of parallel connections) to -c ...
+	  -C is now a hidden option to specify the number of retries on
+	  connection timeouts [vH]
+	* More efficient checks on last timeout waiting routine
+	* Minor display message fixes [vH]
+	* Oops due a bug in the makefile, no openssl support was in, fixed.
+	  (introduced in 3.1) [vH]
+	* Reconnects were made to the wrong target/port, fixed.
+	  (introduced in 3.2) [vH]
+
+v3.2	June 2003 (THC beta release)
+	* Made all connects unblocked. this speeeeeds things up and prevents
+	  hangs on scans to firewalled ports [vH]
+	* Made the tcp port reuse for rpc scanning more effective [vH]
+	* Added more debug modes, the more -v you put, the more you get [vH]
+	* Added new ids (thanks to mrjoe@host.sk and yclin@ustc.edu)
+
+v3.1	June 2003 (unreleased)
+	* Added printing of the trigger name if a match is made in verbose
+	  mode. Good idea by mstar@smoke.dope.org [vH]
+	* Fixed compile problems (thanks to lionel.garcia@airbus.com,
+	  mstar@smoke.dope.org and vlaad@sezampro.yu) [vH]
+	* Added new ids (thanks to mstar@smoke.dope.org, mhauke@roox.ath.cx,
+	  and vlaad@sezampro.yu)
+	* RPC ids were not printed, fixed [vH]
+
+v3.0	June 2003 (THC alpha release)
+	! Completely rewritten from scratch ! [vH]
+	  Thanks go to Skyper who pointed me to the pcre library!
+	- By this, the following small bugs in v2.x were noticed:
+		- in task calculations, triggers to send to both udp and tcp
+		  were never counted
+		- tasks numbers reduced for e.g. SSL mode would also apply
+		  to RPC mode
+		- compilation without OPENSSL never worked
+	* NEW FEATURES *
+		* responses (appdefs.resp):
+		  * response strings are now real perl regular expressions
+		  * can hit only on a defined trigger if wished so
+		  * can have a minimum and maximum length set on the reply data
+		  * can require the ip protocol (tcp or udp)
+		* In RPC scan mode, TCP connections are re-used
+		* better readable data dumps, warnings and errors
+		* safety checks on everything
+		* a few more response ids
+	# CHANGES #
+		# switch the meaning of the -u and -U options
+		# file formats for appdefs.* changed
+		# output changed a bit (hope its better now)
+		# README, man page, etc. are all up to date now
+	? so ... ?
+		? Please test this version as hard as you can and report ?
+
+v2.7	June 2003 (THC release candidate)
+	* Removed the unnecessary NFS trigger which SANS wrote snort rules
+	  for :-) [DJ] >>> http://www.sans.org/resources/idfaq/amap.php
+
+v2.6	June 2003 (THC internal test release)
+	* Fixed a bug which sent all UDP triggers to TCP ports as well.
+	  (thanks to ath@algonet.se!) [vH]
+	* Added -DCYGWIN compile definition to let it easily compile
+	  on cygwin (thanks to hans - posted into the THC forum) [vH]
+	* Added/fixed a few triggers/responses (thanks to ath@algonet.se,
+	  robertj@wirehub.nl, rooot@hotpop.com) [vH]
+	* Optimized connection handling - RPC identification wont loose
+	  responses now [vH]
+
+v2.5	May 2003 (THC release candidate 2)
+	* Fixed a bug in -o output and rpc scanning, hope it works
+	  now. (reported by Johny ;-) [vH]
+	* Updated man page [vH]
+
+v2.4	May 2003 (THC release candidate)
+	* Made ports on command line default to TCP, therefore removed
+	  -sT|U option, and added the -U option to choose UDP protocol [vH]
+	* Added a few more fingerprints (thanks to kk_qq@263.net,
+	  monchan@ngeforum.it and Jesus Munoz + Daniel Solis of KPMG
+	  Espania)
+
+v2.3	May 2003 (internal test release)
+	* Added RPC identification mode (happy now Johnny? ;-) [vH]
+	* Added appdefs.rpc (converted from nmap) [vH]
+	* Added -R mode which will DISABLE RPC identifications [vH]
+	* Rewrote code, functions and structures [vH]
+
+v2.2	May 2003 (internal test release)
+	* lots of new application fingerprints added (thanks to nessus)
+	* added secondary identification type in appdefs.resp:
+	  e.g. http-apache - means: http protocol, apache service
+	  and added that for the lookup function in amap. [vH]
+	* Changed the meaning of the -S switch!!! [vH]
+	  - Removed -S mode which tried SSL connects to all ports
+	  - Added -S mode which will DISABLE an SSL connect to a port
+	    after it has successfully been identified to support SSL
+	* added "time" detection (usually tcp port 37)
+	* added port unreachable detection for udp in amap and amapcrap
+
+v2.1    May 2003 (THC release cadidate 2)
+	* Now you can specify as many ports on the command line as you like,
+	  also, you can specify some on command line, and still use the -i
+	  option. [vH]
+	* fixed a bug in the target selection engine, some ports were not
+	  tested, depending on options. [vH]
+	* fixed a bug in the amapcrap display routine for the response [vH]
+	* uh, -D appdefs option was never correctly implemented, fixed [vH]
+	* added a few responses [vH]
+
+v2.0    April 2003 (THC release candidate)
+	* big feature add: multiple identifications per response, for a
+	  more reliable identification! [vH]
+	* added amapcrap to send random stuff to ports to illicit a response [vH]
+	* added machine readable ouput format (-m) [vH]
+	* implemented skip on ports which become unavailable [vH]
+	* reversed loops. before, all triggers were sent to the same
+	  port, then to the next, etc. now a trigger is sent to every port
+	  first. By this, port crashes will become rarer (e.g. inetd's "too
+	  fast respawns" detection) [vH]
+	* Rewrote configure script to hopefully run on Solaris. Please report! [vH]
+	* small bug fixes [vH]
+	* code beautification [vH]
+	* more application fingerprints [DR, you guys out there]
+	* optimized fingerprints due to new features [vH]
+
+v1.2.1b	September 2002 (THC release candidate 2)
+	* when only a few tasks are there, the read_response loop was 
+	  only done once, before responses could come in. sleep(1) provided
+          the answer.... [DR]
+	* fixed -p <proto> case sensitivity bug [DR]
+	* fixed -t <timeout> bug [DR]
+
+v1.2.1	September 2002 (THC release candidate)
+	* Thanks to Dagobert Michelsen Solaris with DNS resolution now
+          doesn't coredump no more, but also doesn't work :-(
+	* updated man page etc. [DR]
+
+v1.2	August 2002 (private release)
+	* No more fork()ing around, non-blocking sockets are the way to go!
+	  So: much greater efficiency, speed, and no more hanging(?) [DR]
+	* around waiting for responses from dead kids etc.... [DR]
+	* suppression of multiple secondary id's of protocols [DR]
+	* fixed some small stuff in SSL routines [DR]
+
+v1.1	August 2002 (unreleased)
+	* added much needed SSL support (-S switch) [DR]
+
+v0.95c	August 2002 (unreleased)
+	* added and tuned triggers and responses [DR]
+	* fixed printing to logfile bug [DR]
+	* fixed showstopper (vH, you used goto?????) [DR]
+
+v0.95b  March 2002 (first public beta release)
+	* added manpage [DR]
+	* fixed a small bug [DR]
+
+v0.9	February 2002 (private release)
+	* ported to Solaris. Compiles clean on OpenBSD. [vH]
+	* fixed the final never-ending loop (really!) [vH]
+	* fixed command line target/port function, seems like 3 lines were
+	  accidently deleted [vH]
+	* cleaned up code to prevent compiler warnings and added humour :-) [vH]
+	* fixed 3 by-one-byte overflows [vH]
+
+v0.8	February 2002 (private release)
+	* Finally got rid of bug that stopped amap from completing.  [DR]
+	* Now, amap only sends UDP triggers to UDP ports and TCP triggers to
+	  tcp ports. It sends undefined triggers to both kind of ports.  [DR]
+
+v0.7	February 2002 (unreleased)
+	* added and reformatted some triggers and responses [DR]
+	* added listing of unidentified ports after completion [DR]
+
+v0.6	February 2002	(private release)
+	* scantype check for sending triggers was missing, uh [vH]
+	* added a few responses [vH]
+	* removed tftp check, it's too weird how it works currently [vH]
+
+v0.5b   January 2002    (private release)
+	* fixed a bug in lookup function for substrings and startstrings [DR]
+	* added triggers and responses [DR]
+
+v0.5	January 2002	(private release)
+	* fixed a bug in the lookup function for unknown responses [DR/vH]
+
+v0.4	January 2002	(private release)
+	* only the first of same unknown responses for a port is printed [vH]
+	* added search path for trigger/response files (20 directories) [vH]
+	* fixed variable names [vH]
+	* some beautifications [vH]
+
+v0.3	January 2002	(private release)
+	* changed the "print unknown responses" option to be default [vH]
+	* fixed a bug in the print_banner function [vH]
+	* dumping responses will now also show it in printable ascii [vH]
+	* fixed various bugs in the dump function [vH]
+	* added check for invalid nmap input file [vH]
+	* had to implement a work around to prevent mis-detections on ECHO port [vH]
+	* added some responses [vH]
+	* removed unnecessary entries from the triggers file [vH]
+
+v0.2	December 2001	(private release)
+	* fixed numerous bugs. numerous ;-) [vH]
+	* added new feature: -b prints the banner received [vH]
+	* added CHANGES, TODO and LICENSE file [vH]
+
+v0.1	December 2001	(private release)
+	* first internal release [DR]

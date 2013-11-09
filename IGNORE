@@ -1,0 +1,9 @@
+test -e ___TODO_IMPORTANT_BEFORE_PUBLIC_RELEASE && {
+  cat ___TODO_IMPORTANT_BEFORE_PUBLIC_RELEASE
+  read TEST
+}
+for i in amap.h README CHANGES; do
+  joe $i
+done
+rm ___TODO_IMPORTANT_BEFORE_PUBLIC_RELEASE
+delbak
